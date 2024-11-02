@@ -38,6 +38,7 @@ invalid_qty_count = df.filter(
 ).count()
 print(f"Number of invalid 'qty' values: {invalid_qty_count}")
 
+
 # Check for unusual 'country' values
 unusual_country_count = df.filter(
     col("country").isin("Mars", "Atlantis", "Unknown")
