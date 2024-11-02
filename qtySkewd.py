@@ -17,7 +17,7 @@ fake = Faker()
 # Define the number of rows to generate
 num_rows = 15000
 bad_data_rows = int(num_rows * 0.05)  # 5% bad data
-failure_rows = 500 
+failure_rows = 500  # 500 rows will be marked as transaction failures
 
 # Define product categories and realistic product names for each category
 product_categories = ["Electronics", "Clothing", "Home", "Beauty", "Sports", "Automobile"]
@@ -34,7 +34,7 @@ countries = ["USA", "UK", "India", "Germany", "Australia", "Canada"]
 ecommerce_sites = ["Amazon", "Flipkart", "eBay", "AliExpress", "BestBuy"]
 failure_reasons = ["Insufficient Funds", "Card Expired", "Payment Gateway Timeout", "Authentication Failed"]
 
-# Population, median age, and gender distribution data
+# Population, median age, and sex distribution data
 country_trends = {
     "USA": {"population": 331000000, "median_age": 38},
     "UK": {"population": 67000000, "median_age": 40},
@@ -43,13 +43,13 @@ country_trends = {
     "Australia": {"population": 25000000, "median_age": 37},
     "Canada": {"population": 38000000, "median_age": 41}
 }
-gender_distribution = ["Male", "Female"]
+sex_distribution = ["Male", "Female"]
 
-
+# Define the top-selling category, popular product, and peak hour/location
 top_selling_category = "Electronics"
 popular_product = "Smartphone"
 peak_location = "New York"
-peak_hour = 15
+peak_hour = 15  # 3 PM
 
 # Helper function to select a product name based on the category
 def get_product_name(category):
@@ -58,7 +58,7 @@ def get_product_name(category):
 # Generate data and store as a list of dictionaries
 data = []
 
-
+# Generate initial 15,000 rows of data
 for i in range(num_rows):
     country = random.choice(countries)
     category = random.choice(product_categories)
@@ -82,18 +82,18 @@ for i in range(num_rows):
         "failure_reason": "",
         "population": country_trends[country]["population"],
         "median_age": country_trends[country]["median_age"],
-        "gender": random.choice(gender_distribution)
+        "sex": random.choice(sex_distribution)
     }
     
     # Apply skew for the top-selling category
     if category == top_selling_category:
-        record["qty"] *= 2
+        record["qty"] *= 2  # Increase quantity for the top-selling category
         if product == popular_product:
-            record["qty"] *= 2
+            record["qty"] *= 2  # Further increase for the popular product
 
     # Apply skew for the peak location and hour
     if record["city"] == peak_location and record["datetime"].hour == peak_hour:
-        record["qty"] *= 2 
+        record["qty"] *= 2  # Increase quantity for peak time/location
 
     # Randomly introduce bad data across columns without coupling
     if random.random() < (bad_data_rows / num_rows):
@@ -101,6 +101,7 @@ for i in range(num_rows):
             record["price"] = random.choice([-1.99, "NaN", "Free"])
         if random.random() < 0.5:
             record["qty"] = random.choice([-5, -15, 0])
+        if random.random() < 0.5:
             record["country"] = random.choice(["Mars", "Atlantis", "Unknown"])
     
     data.append(record)
@@ -113,10 +114,11 @@ for i in random.sample(range(num_rows), failure_rows):
 # Convert data to a DataFrame
 df = spark.createDataFrame(data)
 
+# Repartition the DataFrame to spread data across multiple partitions
 df = df.repartition(10)
 
 # Coalesce into a single partition to write as a single CSV file
 df.coalesce(1).write.csv("./ecommerce_data.csv", header=True, mode="overwrite")
 
+# Stop Spark session
 spark.stop()
-
