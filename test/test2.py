@@ -52,4 +52,4 @@ print("Sample rows with invalid 'qty' values:")
 df.filter((col("qty") <= 0) | (col("qty").isin(-5, -15))).show(5)
 
 print("Sample rows with unusual 'country' values:")
-df.filter(col("country").isin("Mars", "Atlantis", "Unknown")).show(5)
+df.filter(col("country").isin("Mars", "Atlantis", "Unknown")).show(5) 
