@@ -7,6 +7,8 @@ spark = SparkSession.builder.appName("ECommerceDataCleaning").getOrCreate()
 # Load data from HDFS
 df = spark.read.csv("hdfs://localhost:9000/user/dejtes/contains_bad_data.csv", header=True, inferSchema=True)
 
+df = spark.read.csv("hdfs://localhost:9000/user/nispri/furniture_data.csv", header=True, inferSchema=True)
+
 # Display schema and sample data
 df.printSchema()
 df.show(5)

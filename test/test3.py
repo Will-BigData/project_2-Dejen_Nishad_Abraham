@@ -7,7 +7,7 @@ spark = SparkSession.builder.appName("ECommerceAnalysis").getOrCreate()
 
 df = spark.read.csv("hdfs://localhost:9000/user/dejtes/contains_bad_data.csv", header=True, inferSchema=True)
 
-df = spark.read.csv("hdfs://localhost:9000/user/nispri/ecomm_data.csv", header=True, inferSchema=True)
+df = spark.read.csv("hdfs://localhost:9000/user/nispri/final_data.csv", header=True, inferSchema=True)
 
 # Calculate total sales (price * qty) and filter out records with invalid quantities (e.g., negative values)
 df = df.filter(col("qty") > 0)
