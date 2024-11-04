@@ -27,6 +27,8 @@ blank_countries.show()
 # Filter out rows with NULL or empty product_id
 df_filtered = df.filter(col("product_id").isNotNull())
 
+
+
 # Filter out rows with NULL, empty, or invalid country values
 df_filtered = df_filtered.filter((col("country").isin(valid_countries)) & (col("country") != ""))
 
