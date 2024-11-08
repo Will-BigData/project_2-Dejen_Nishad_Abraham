@@ -113,8 +113,6 @@ for i in random.sample(range(num_rows), failure_rows):
 # Convert data to a DataFrame
 df = spark.createDataFrame(data)
 
-df = df.repartition(10)
-
 # Coalesce into a single partition to write as a single CSV file
 df.coalesce(1).write.csv("./ecommerce_data.csv", header=True, mode="overwrite")
 
