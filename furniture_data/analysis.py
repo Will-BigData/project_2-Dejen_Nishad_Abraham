@@ -11,9 +11,10 @@ df = spark.read.csv("hdfs://localhost:9000/user/xxx/final_data.csv", header=True
 output_path = "hdfs://localhost:9000/user/xxx/analysis_results/final_analysis.csv"
 
 # 1. Top-selling category of items per country
-top_selling_category = df.groupBy("product_category", "country") \
-    .agg(sum("qty").alias("total_qty_sold")) \
-    .orderBy(col("total_qty_sold").desc()) \
+top_selling_category = df.withColumn("total_sale", col("qty") * col("price")) \
+    .groupBy("product_category", "country") \
+    .agg(sum("total_sale").alias("total_sales_amount")) \
+    .orderBy(col("total_sales_amount").desc()) \
     .withColumn("analysis_type", lit("Top-selling category per country"))
 print("Top Selling Categories Per Country:")
 top_selling_category.show()
