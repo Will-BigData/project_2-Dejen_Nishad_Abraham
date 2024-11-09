@@ -48,7 +48,7 @@ highest_traffic_locations.show(20, truncate=False)
 
 
 # 4. Times with the highest traffic of sales per country
-# Calculate sales count per hour, per country
+
 traffic_by_hour_country = df.withColumn("hour", hour("datetime")) \
     .groupBy("country", "hour") \
     .agg(count("*").alias("sales_count")) \

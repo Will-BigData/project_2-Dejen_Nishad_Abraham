@@ -85,13 +85,12 @@ for i in range(num_rows):
         "gender": random.choice(gender_distribution)
     }
     
-    # Apply skew for the top-selling category
+ 
     if category == top_selling_category:
         record["qty"] *= 2
         if product == popular_product:
             record["qty"] *= 2
 
-    # Apply skew for the peak location and hour
     if record["city"] == peak_location and record["datetime"].hour == peak_hour:
         record["qty"] *= 2 
 
@@ -105,7 +104,6 @@ for i in range(num_rows):
     
     data.append(record)
 
-# Randomly mark 500 rows as failures independently of bad data
 for i in random.sample(range(num_rows), failure_rows):
     data[i]["payment_transaction_success"] = "N"
     data[i]["failure_reason"] = random.choice(failure_reasons)
