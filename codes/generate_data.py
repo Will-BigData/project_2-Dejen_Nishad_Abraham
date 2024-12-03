@@ -14,7 +14,7 @@ spark = SparkSession.builder \
 # Initialize Faker for generating realistic fake data
 fake = Faker()
 
-# Define the number of rows to generate
+
 num_rows = 15000
 failure_rows = 1000  # Limit failure rows to 1000
 

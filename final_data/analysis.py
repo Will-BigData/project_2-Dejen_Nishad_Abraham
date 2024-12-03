@@ -9,7 +9,7 @@ spark = SparkSession.builder \
 df = spark.read.csv("hdfs://localhost:9000/user/<your_name>/clean_data.csv", header=True, inferSchema=True)
 
 
-output_path = "hdfs://localhost:9000/user/nifty/analysis_results/final_analysis.csv"
+output_path = "hdfs://localhost:9000/user/<your_name>/analysis_results/final_analysis.csv"
 
 # 1. Top-selling category of items per country
 top_selling_category = df.withColumn("total_sale", col("qty") * col("price")) \
